@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Stopwatch - JavaScript</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+        }
+
+        html, body{
+            height: 100%;
+        }
+
+        .container{
+            text-align: center;
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        h2, h3{
+            padding: 10px;
+            text-shadow: 2px 3px rgba(0, 0, 0, 0.171);
+        }
+
+        button{
+            background-color: #069;
+            color: white;
+            font-size: 32px;
+            padding: 8px 20px;
+            cursor: pointer;
+            border: 0;
+            border-radius: 10px;
+            box-shadow: 2px 3px rgba(0, 0, 0, 0.342);
+            text-shadow: 2px 3px rgba(0, 0, 0, 0.171);
+        }
+    </style>
+</head>
+<body>
+    <audio id="sound" src="alarm.mp3" style="display: none;"></audio><!--sound-->
+
+    <div class="container">
+        <h2>Minutos</h2>
+        <select id="minutos" name="minutos"></select><!--minutos-->
+
+        <h2>Segundos</h2>
+        <select id="segundos" name="segundos"></select><!--segundos-->
+
+        <br>
+        <br>
+
+        <button id="comecar">Começar!</button><!--comecar-->
+
+        <div id="display">
+            <h3></h3>
+        </div><!--display-->
+    </div><!--container-->
+
+    <script>
+        var display = document.getElementById('display')
+
+        var minutos = document.getElementById('minutos')
+        var segundos = document.getElementById('segundos')
+        var comecar = document.getElementById('comecar')
+
+        var cronometorSeg
+        var minutoAtual
+        var segundoAtual
+
+        var interval
+
+        for (var i = 0; i <= 60; i++){
+            minutos.innerHTML+='<option value="'+i+'">'+i+'</option>'
+        }
+
+        for (var i = 1; i <= 60; i++){
+            segundos.innerHTML+='<option value="'+i+'">'+i+'</option>'
+        }
+
+        comecar.addEventListener('click', function(){
+            minutoAtual = minutos.value
+            segundoAtual = segundos.value
+
+            display.childNodes[1].innerHTML = "00:" + (minutoAtual < 10 ? "0" : "") + minutoAtual + ":" + (segundoAtual < 10 ? "0" : "") + segundoAtual
+
+            interval = setInterval(function(){
+                segundoAtual --
+
+                if (segundoAtual <= 0){
+                    if (minutoAtual > 0){
+                        minutoAtual --
+                        segundoAtual = 59
+                    }
+                    else{
+                        document.getElementById("sound").play()
+                        clearInterval(interval)
+                    }
+                }
+
+                display.childNodes[1].innerHTML = "00:" + (minutoAtual < 10 ? "0" : "") + minutoAtual + ":" + (segundoAtual < 10 ? "0" : "") + segundoAtual
+            },1000)
+        })
+    </script>
+</body>
+</html>
